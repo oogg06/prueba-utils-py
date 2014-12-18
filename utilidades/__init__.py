@@ -5,7 +5,10 @@ UTILIDADES_OK           =0
 UTILIDAD_TAM_BUFFER     =4096
 
 import importlib
-import xlrd
+import os
+
+from datetime import date, timedelta
+
 
 def importar_paquete(nombre):
     try:
@@ -15,6 +18,7 @@ def importar_paquete(nombre):
 def imprimir_error_importacion(nombre_paquete):
     print ("No tienes la biblioteca {0}, necesitada por utilidades.".format(nombre_paquete))
     print ("Prueba a instalarla con (sudo) pip install {0}".format(nombre_paquete))
+
 #Añade a esta lista cualquier nombre de paquete que necesites
 paquetes_necesarios=["requests", "xlrd"]
 for paquete in paquetes_necesarios:
@@ -29,6 +33,10 @@ for paquete in paquetes_necesarios:
 #
 #########################################################################################
 
+def existe_fichero(nombre_fichero):
+    if (os.path.isfile(nombre_fichero)):
+        return True
+    return False
 
 """Descarga un archivo desde una url y lo guarda en el nombre de archivo indicado"""
 def descargar_archivo(url, nombre_archivo_destino):
@@ -38,8 +46,30 @@ def descargar_archivo(url, nombre_archivo_destino):
             fd.write(chunk)
     return UTILIDADES_OK
 
+"""Descarga un archivo desde una URL solo en el caso de que el archivo no existiera"""
+def descargar_archivo_si_no_existe(url, nombre_archivo_destino):
+    if (existe_fichero(nombre_archivo_destino)):
+        return
+    return descargar_archivo(url, nombre_archivo_destino)
 
-
+"""Genera una lista de fechas empezando en cierto día del año y hasta el dia de hoy"""
+def generar_lista_fechas(dia, mes, anio):
+    #Formato:
+    # %Y año con cuatro cifras
+    # %m mes con dos cifras
+    # %d dia con dos cifras
+    # %a Dia de la semana en idioma local "Sun", "Mon"
+    # %A Dia de la semana en idioma local "Sunday", "Monday"
+    
+    formato="%Y%m%d"
+    lista_fechas=[]
+    fecha=date(anio, mes, dia)
+    hoy=date.today()
+    incremento=timedelta(days=1)
+    while (fecha<=hoy):
+        lista_fechas.append(fecha.strftime(formato))
+        fecha=fecha+incremento
+    return lista_fechas
 
 class LibroExcel(object):
     """Abrir un archivo Excel que se asume que está en formato Unicode (Excel 97 y posteriores)"""
@@ -56,4 +86,6 @@ class LibroExcel(object):
         
         valor_celda=self.hoja.cell_value(fila, columna)
         return valor_celda
+    
+
 
