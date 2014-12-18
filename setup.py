@@ -9,6 +9,8 @@ setup(name='utilidades',
       author='ogg06',
       author_email='flyingcircus@example.com',
       license='MIT',
-      install_requires=("requests"),
+      install_requires=(["requests", "xlrd"]),
       packages=['utilidades'],
       zip_safe=False)
+
+
