@@ -1,8 +1,0 @@
-setup.py
-utilidades/__init__.py
-utilidades.egg-info/PKG-INFO
-utilidades.egg-info/SOURCES.txt
-utilidades.egg-info/dependency_links.txt
-utilidades.egg-info/not-zip-safe
-utilidades.egg-info/requires.txt
-utilidades.egg-info/top_level.txt
